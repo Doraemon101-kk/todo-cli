@@ -70,9 +70,8 @@ python -m todo_list done 1
 ```python
 from todo_list.engine import TodoList
 
-```
-# 使用自定义目录
-my_todo = TodoList(data_dir="/path/to/my/tasks")
+
+my_todo = TodoList(data_dir="/path/to/my/tasks")```
 ---
 
 > ✨ 特点：简单、快速、零依赖，适合日常轻量级任务管理。
