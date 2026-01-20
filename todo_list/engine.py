@@ -6,11 +6,11 @@ class InvalidTaskIDError(Exception):
     pass
 
 class TodoList(object):
-    def __init__(self, data_dir=None):  # ← 就改这一行！
+    def __init__(self, data_dir=None):
         if data_dir is None:
             self.data_dir = Path.home() / ".todolist"
         else:
-            self.data_dir = Path(data_dir)  # ← 支持传入路径
+            self.data_dir = Path(data_dir)
         
         self.data_dir.mkdir(exist_ok=True) 
 
@@ -48,7 +48,7 @@ class TodoList(object):
                 found = False
                 for task in self.tasks:
                     if task["id"] == task_ID:
-                        self.tasks.remove(task)
+                        task["done"] = True
                         self.save()
                         found = True
                         break
@@ -57,6 +57,7 @@ class TodoList(object):
             
             else:
                 raise InvalidTaskIDError
+            
         except ValueError:
             raise InvalidTaskIDError
 
@@ -64,6 +65,7 @@ class TodoList(object):
         if not self.tasks:
             print("任务列表空")
             return
+        
         for task in self.tasks:
             if not task["done"]:
                 print(f"{task['id']:<5}{task['task']}")
