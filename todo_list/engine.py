@@ -23,7 +23,19 @@ class TodoList(object):
             json.dump(self.tasks, f, ensure_ascii = False, indent = 4)
 
     def add(self, stuff):
-        pass
+        if self.tasks:
+            new_id = max (tasks["id"] for tasks in self.tasks) + 1
+        else:
+            new_id = 1
+
+        new_task = {
+            "id":new_id,
+            "task":stuff,
+            "done":False,
+        }
+        self.tasks.append(new_task)
+
+        self.save()
 
     def finish(self, stuff):
         stuff = stuff.strip()
@@ -47,4 +59,3 @@ class TodoList(object):
 
     def display(self):
         pass
-    
