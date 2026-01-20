@@ -6,8 +6,12 @@ class InvalidTaskIDError(Exception):
     pass
 
 class TodoList(object):
-    def __init__(self):
-        self.data_dir = Path.home() / ".todolist"
+    def __init__(self, data_dir=None):  # ← 就改这一行！
+        if data_dir is None:
+            self.data_dir = Path.home() / ".todolist"
+        else:
+            self.data_dir = Path(data_dir)  # ← 支持传入路径
+        
         self.data_dir.mkdir(exist_ok=True) 
 
         self.data_file = self.data_dir / "todos.json"
@@ -50,7 +54,9 @@ class TodoList(object):
                         break
                 if not found:
                     raise InvalidTaskIDError("该id任务不存在")
-                
+            
+            else:
+                raise InvalidTaskIDError
         except ValueError:
             raise InvalidTaskIDError
 
