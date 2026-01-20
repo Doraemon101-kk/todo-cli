@@ -19,14 +19,11 @@ class TodoList(object):
             self.tasks = json.load(f)
 
     def save(self):
-        with open (self.data_file, "a") as f:
+        with open (self.data_file, "w", encoding = "utf-8") as f:
             json.dump(self.tasks, f, ensure_ascii = False, indent = 4)
 
     def add(self, stuff):
-        if self.tasks:
-            new_id = max (tasks["id"] for tasks in self.tasks) + 1
-        else:
-            new_id = 1
+        new_id = max ((task["id"] for task in self.tasks), default = 0) + 1
 
         new_task = {
             "id":new_id,
@@ -52,10 +49,15 @@ class TodoList(object):
                         found = True
                         break
                 if not found:
-                    print("该id任务不存在")
+                    raise InvalidTaskIDError("该id任务不存在")
                 
         except ValueError:
             raise InvalidTaskIDError
 
     def display(self):
-        pass
+        if not self.tasks:
+            print("任务列表空")
+            return
+        for task in self.tasks:
+            if not task["done"]:
+                print(f"{task['id']:<5}{task['task']}")
