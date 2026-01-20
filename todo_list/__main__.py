@@ -1,31 +1,39 @@
 from .engine import TodoList
+from .engine import InvalidTaskIDError
 from sys import argv
 
+def help():
+    print("添加任务：输入 add \"task\"")
+    print("完成任务：输入 done <number>")
+    print("展示任务清单：输入list")
+
 todo = TodoList()
-
-while True:
-    print("通过add \"任务内容\"添加任务")
-    print("通过list得到所有未完成任务列表")
-    print("通过done <number>标记完成")
-    print("通过save保存任务数据")
-    print("通过exit退出")
-    script, stuff = argv
-
-    if "add" in stuff:
-        todo.add("")
-
-    elif "list" in stuff:
+if len(argv) == 2:
+    script, cmd = argv
+    if cmd == "list":
         todo.display()
-    elif "done" in stuff:
-        todo.finish("")
+    else:
+        print("错误的输入")
+    
 
-    elif "save" in stuff:
-        todo.save()
+elif len(argv) == 3:
+    script, cmd, stuff = argv
 
-    elif "exit" in stuff:
-        exit(0)
+    if cmd == "add":
+        todo.add(stuff)
+
+    elif cmd == "done":
+        try:
+            todo.finish(stuff)
+        except InvalidTaskIDError:
+            print("序号必须为正整数")
 
     else:
-        print("错误输入")
+        print("错误的输入")
+    
+elif len(argv) == 1:
+    help()
 
-save_file.close()
+
+else:
+    print("错误的输入")
